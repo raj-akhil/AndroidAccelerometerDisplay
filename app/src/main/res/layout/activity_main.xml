@@ -4,72 +4,96 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:background="#346B60"
     android:gravity="center"
+    android:orientation="vertical"
     android:padding="24dp"
     tools:context=".MainActivity">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
         android:text="Accelerometer Readings"
-        android:textSize="28sp"
-        android:textStyle="bold"
         android:textColor="#333333"
-        android:layout_marginBottom="20dp"/> <TextView
-    android:id="@+id/xValueTextView"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="X: 0.0"
-    android:textSize="24sp"
-    android:textColor="#000000"
-    android:paddingBottom="8dp"/> <TextView
-    android:id="@+id/yValueTextView"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Y: 0.0"
-    android:textSize="24sp"
-    android:textColor="#000000"
-    android:paddingBottom="8dp"/> <TextView
-    android:id="@+id/zValueTextView"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Z: 0.0"
-    android:textSize="24sp"
-    android:textColor="#000000"
-    android:paddingBottom="30dp"/> <TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Gyroscope Readings"
-    android:textSize="28sp"
-    android:textStyle="bold"
-    android:textColor="#333333"
-    android:layout_marginBottom="20dp"/>
+        android:textSize="28sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/xValueTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="8dp"
+        android:text="X: 0.0"
+        android:textColor="#000000"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/yValueTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="8dp"
+        android:text="Y: 0.0"
+        android:textColor="#000000"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/zValueTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="30dp"
+        android:text="Z: 0.0"
+        android:textColor="#000000"
+        android:textSize="24sp" />
+
+    <TextView
+        android:layout_width="303dp"
+        android:layout_height="59dp"
+        android:layout_marginBottom="20dp"
+        android:text="Gyroscope Readings"
+        android:textColor="#333333"
+        android:textSize="28sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/gyroXValueTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingBottom="8dp"
         android:text="GX: 0.0"
-        android:textSize="24sp"
         android:textColor="#000000"
-        android:paddingBottom="8dp"/>
+        android:textSize="24sp" />
 
     <TextView
         android:id="@+id/gyroYValueTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingBottom="8dp"
         android:text="GY: 0.0"
-        android:textSize="24sp"
         android:textColor="#000000"
-        android:paddingBottom="8dp"/>
+        android:textSize="24sp" />
 
     <TextView
         android:id="@+id/gyroZValueTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="GZ: 0.0"
-        android:textSize="24sp"
-        android:textColor="#000000"/>
+        android:textColor="#000000"
+        android:textSize="24sp" />
+
+    <Switch
+        android:id="@+id/websocket_toggle_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send Data via WebSocket"
+        android:layout_marginTop="24dp"/>
+
+    <EditText
+        android:id="@+id/editTextText"
+        android:layout_width="362dp"
+        android:layout_height="65dp"
+        android:ems="10"
+        android:inputType="text"
+        android:text="Project Seizure" />
 
 </LinearLayout>
