@@ -15,6 +15,8 @@ import okhttp3.Request
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import org.json.JSONObject // To create JSON data
+import android.widget.Spinner
+
 
 class MainActivity : ComponentActivity(), SensorEventListener {
 
@@ -22,6 +24,7 @@ class MainActivity : ComponentActivity(), SensorEventListener {
     private lateinit var sensorManager: SensorManager
     private var accelerometer: Sensor? = null
     private var gyroscope: Sensor? = null
+    private lateinit var labelSpinner: Spinner
 
     // UI elements
     private lateinit var tvAccelerometerX: TextView
@@ -31,6 +34,9 @@ class MainActivity : ComponentActivity(), SensorEventListener {
     private lateinit var tvGyroscopeGy: TextView
     private lateinit var tvGyroscopeGz: TextView
     private lateinit var websocketToggleSwitch: Switch
+
+    private var lastSentTime = System.currentTimeMillis()
+    private val sendIntervalMillis = 5L // 20 Hz = 50 ms interval
 
     // WebSocket-related variables
     private val client = OkHttpClient()
@@ -48,7 +54,7 @@ class MainActivity : ComponentActivity(), SensorEventListener {
     // IMPORTANT:
     // For Emulator: use "ws://10.0.2.2:8080" (10.0.2.2 is your host machine's localhost)
     // For Physical Device: use "ws://YOUR_COMPUTER_IP_ADDRESS:8080" (e.g., "ws://192.168.1.100:8080")
-    private val WEBSOCKET_URL = "ws://10.0.2.2:8080"
+    private val WEBSOCKET_URL = "ws://192.168.1.106:8080"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,6 +68,7 @@ class MainActivity : ComponentActivity(), SensorEventListener {
         tvGyroscopeGy = findViewById(R.id.gyroYValueTextView)
         tvGyroscopeGz = findViewById(R.id.gyroZValueTextView)
         websocketToggleSwitch = findViewById(R.id.websocket_toggle_switch)
+        labelSpinner = findViewById(R.id.activitySpinner)
 
         // Initialize Sensor Manager
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
@@ -73,8 +80,8 @@ class MainActivity : ComponentActivity(), SensorEventListener {
             if (isChecked) {
                 connectWebSocket()
                 // Register listeners only when switch is ON and we want to send data
-                accelerometer?.let { sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_GAME) }
-                gyroscope?.let { sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_GAME) }
+                accelerometer?.let { sensorManager.registerListener(this, it, 20_000) }
+                gyroscope?.let { sensorManager.registerListener(this, it, 20_000) }
                 Log.d("WebSocket", "WebSocket sending ON")
             } else {
                 disconnectWebSocket()
@@ -139,6 +146,7 @@ class MainActivity : ComponentActivity(), SensorEventListener {
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
+
         if (event == null) return
 
         when (event.sensor.type) {
@@ -160,10 +168,16 @@ class MainActivity : ComponentActivity(), SensorEventListener {
             }
         }
 
-        // Send data if WebSocket is connected and switch is ON
-        if (websocketToggleSwitch.isChecked && webSocket != null) {
+        val currentTime = System.currentTimeMillis()
+        val deltaTime = currentTime - lastSentTime
+        if (deltaTime >= sendIntervalMillis) {
+            lastSentTime = currentTime
+            val frequency = 1000.0 / deltaTime  // Hz
+            // Build your JSON object and send via WebSocket here
+            val label = labelSpinner.selectedItem.toString()
+
             val jsonObject = JSONObject().apply {
-                put("timestamp", System.currentTimeMillis())
+                put("timestamp", currentTime)
                 put("accelerometer", JSONObject().apply {
                     put("x", currentAccelX)
                     put("y", currentAccelY)
@@ -174,12 +188,14 @@ class MainActivity : ComponentActivity(), SensorEventListener {
                     put("gy", currentGyroGy)
                     put("gz", currentGyroGz)
                 })
+                put("label", label)
             }
-            webSocket?.send(jsonObject.toString())
-            // Log.d("WebSocket_Send", jsonObject.toString()) // Uncomment to see data being sent
+
+            if (websocketToggleSwitch.isChecked && webSocket != null) {
+                webSocket?.send(jsonObject.toString())
+            }
         }
     }
-
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
         // Not typically used for displaying basic sensor data
     }

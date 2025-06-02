@@ -87,13 +87,10 @@
         android:layout_height="wrap_content"
         android:text="Send Data via WebSocket"
         android:layout_marginTop="24dp"/>
-
-    <EditText
-        android:id="@+id/editTextText"
-        android:layout_width="362dp"
-        android:layout_height="65dp"
-        android:ems="10"
-        android:inputType="text"
-        android:text="Project Seizure" />
+    <Spinner
+        android:id="@+id/activitySpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:entries="@array/activity_labels" />
 
 </LinearLayout>
