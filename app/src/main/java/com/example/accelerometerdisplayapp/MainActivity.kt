@@ -24,6 +24,8 @@ class MainActivity : ComponentActivity(), SensorEventListener {
     private lateinit var sensorManager: SensorManager
     private var accelerometer: Sensor? = null
     private var gyroscope: Sensor? = null
+    private var proximitySensor: Sensor? = null
+    private var lightSensor: Sensor? = null
     private lateinit var labelSpinner: Spinner
 
     // UI elements
@@ -33,6 +35,8 @@ class MainActivity : ComponentActivity(), SensorEventListener {
     private lateinit var tvGyroscopeGx: TextView
     private lateinit var tvGyroscopeGy: TextView
     private lateinit var tvGyroscopeGz: TextView
+    private lateinit var tvProximity: TextView
+    private lateinit var tvLight: TextView
     private lateinit var websocketToggleSwitch: Switch
 
     private var lastSentTime = System.currentTimeMillis()
@@ -50,11 +54,13 @@ class MainActivity : ComponentActivity(), SensorEventListener {
     private var currentGyroGy = 0f
     private var currentGyroGz = 0f
 
+    private var currentProximity = -1f
+    private var currentLight = -1f
     // WebSocket Server Configuration
     // IMPORTANT:
     // For Emulator: use "ws://10.0.2.2:8080" (10.0.2.2 is your host machine's localhost)
     // For Physical Device: use "ws://YOUR_COMPUTER_IP_ADDRESS:8080" (e.g., "ws://192.168.1.100:8080")
-    private val WEBSOCKET_URL = "ws://192.168.1.106:8080"
+    private val WEBSOCKET_URL = "ws://192.168.1.110:8080"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,6 +73,8 @@ class MainActivity : ComponentActivity(), SensorEventListener {
         tvGyroscopeGx = findViewById(R.id.gyroXValueTextView)
         tvGyroscopeGy = findViewById(R.id.gyroYValueTextView)
         tvGyroscopeGz = findViewById(R.id.gyroZValueTextView)
+        tvProximity = findViewById(R.id.proximityTextView)
+        tvLight = findViewById(R.id.lightTextView)
         websocketToggleSwitch = findViewById(R.id.websocket_toggle_switch)
         labelSpinner = findViewById(R.id.activitySpinner)
 
@@ -74,7 +82,8 @@ class MainActivity : ComponentActivity(), SensorEventListener {
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
         gyroscope = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE)
-
+        proximitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY)
+        lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
         // Set up the Switch listener
         websocketToggleSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
@@ -82,6 +91,9 @@ class MainActivity : ComponentActivity(), SensorEventListener {
                 // Register listeners only when switch is ON and we want to send data
                 accelerometer?.let { sensorManager.registerListener(this, it, 20_000) }
                 gyroscope?.let { sensorManager.registerListener(this, it, 20_000) }
+                proximitySensor?.let { sensorManager.registerListener(this, it, 20_000) }
+                lightSensor?.let { sensorManager.registerListener(this, it, 20_000) }
+
                 Log.d("WebSocket", "WebSocket sending ON")
             } else {
                 disconnectWebSocket()
@@ -166,6 +178,14 @@ class MainActivity : ComponentActivity(), SensorEventListener {
                 tvGyroscopeGy.text = String.format("Gy: %.2f", currentGyroGy)
                 tvGyroscopeGz.text = String.format("Gz: %.2f", currentGyroGz)
             }
+            Sensor.TYPE_PROXIMITY -> {
+                currentProximity = event.values[0]
+                tvProximity.text = String.format("Proximity: %.2f", currentProximity)
+            }
+            Sensor.TYPE_LIGHT -> {
+                currentLight = event.values[0]
+                tvLight.text = String.format("Ambient Light: %.2f", currentLight)
+            }
         }
 
         val currentTime = System.currentTimeMillis()
@@ -188,6 +208,8 @@ class MainActivity : ComponentActivity(), SensorEventListener {
                     put("gy", currentGyroGy)
                     put("gz", currentGyroGz)
                 })
+                put("proximity", currentProximity)
+                put("light", currentLight)
                 put("label", label)
             }
 

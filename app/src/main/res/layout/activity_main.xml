@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#346B60"
+    android:background="#DEE0D8"
     android:gravity="center"
     android:orientation="vertical"
     android:padding="24dp"
@@ -26,7 +26,8 @@
         android:paddingBottom="8dp"
         android:text="X: 0.0"
         android:textColor="#000000"
-        android:textSize="24sp" />
+        android:textSize="24sp"
+        android:translationX="-100dp" />
 
     <TextView
         android:id="@+id/yValueTextView"
@@ -35,25 +36,30 @@
         android:paddingBottom="8dp"
         android:text="Y: 0.0"
         android:textColor="#000000"
-        android:textSize="24sp" />
+        android:textSize="24sp"
+        android:translationY="-40dp" />
 
     <TextView
         android:id="@+id/zValueTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingBottom="30dp"
+        android:layout_width="99dp"
+        android:layout_height="54dp"
+        android:paddingBottom="8dp"
         android:text="Z: 0.0"
         android:textColor="#000000"
-        android:textSize="24sp" />
+        android:textSize="24sp"
+        android:translationX="100dp"
+        android:translationY="-80dp" />
 
     <TextView
-        android:layout_width="303dp"
-        android:layout_height="59dp"
+        android:layout_width="281dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:text="Gyroscope Readings"
         android:textColor="#333333"
         android:textSize="28sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:translationX="10dp"
+        android:translationY="-75dp" />
 
     <TextView
         android:id="@+id/gyroXValueTextView"
@@ -62,7 +68,9 @@
         android:paddingBottom="8dp"
         android:text="GX: 0.0"
         android:textColor="#000000"
-        android:textSize="24sp" />
+        android:textSize="24sp"
+        android:translationX="-100dp"
+        android:translationY="-100dp" />
 
     <TextView
         android:id="@+id/gyroYValueTextView"
@@ -71,7 +79,8 @@
         android:paddingBottom="8dp"
         android:text="GY: 0.0"
         android:textColor="#000000"
-        android:textSize="24sp" />
+        android:textSize="24sp"
+        android:translationY="-140dp" />
 
     <TextView
         android:id="@+id/gyroZValueTextView"
@@ -79,18 +88,43 @@
         android:layout_height="wrap_content"
         android:text="GZ: 0.0"
         android:textColor="#000000"
-        android:textSize="24sp" />
+        android:textSize="24sp"
+        android:translationX="100dp"
+        android:translationY="-180dp" />
+
+    <TextView
+        android:id="@+id/proximityTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="8dp"
+        android:text="Proximity: 0.0"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        android:translationY="-100dp" />
+
+    <TextView
+        android:id="@+id/lightTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="8dp"
+        android:text="Ambient Light: 0.0"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        android:translationY="-100dp" />
 
     <Switch
         android:id="@+id/websocket_toggle_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:text="Send Data via WebSocket"
-        android:layout_marginTop="24dp"/>
+        android:translationY="-75dp" />
+
     <Spinner
         android:id="@+id/activitySpinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:entries="@array/activity_labels" />
+        android:entries="@array/activity_labels"
+        android:translationY="-50dp" />
 
 </LinearLayout>
